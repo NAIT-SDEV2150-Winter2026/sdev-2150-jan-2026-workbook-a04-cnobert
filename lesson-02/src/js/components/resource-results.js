@@ -1,58 +1,78 @@
+// resource-results.js
+
 const template = document.createElement('template');
-template.innerHTML = `<!-- Results list -->
-      <section>
-        <div class="card h-100">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <strong>Results</strong>
-            <span class="badge text-bg-secondary">4</span>
-          </div>
+template.innerHTML = `
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
 
-          <div class="list-group list-group-flush">
-            <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
-              <div class="d-flex w-100 justify-content-between">
-                <h2 class="h6 mb-1">Peer Tutoring Centre</h2>
-                <small>Academic</small>
-              </div>
-              <p class="mb-1 small text-body-secondary">Drop-in tutoring and study support.</p>
-              <small class="text-body-secondary">Building W, Room W101</small>
-            </button>
+  <section class="h-100">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>Results</strong>
+        <span class="badge text-bg-secondary count"></span>
+      </div>
 
-            <button type="button" class="list-group-item list-group-item-action">
-              <div class="d-flex w-100 justify-content-between">
-                <h2 class="h6 mb-1">Counselling Services</h2>
-                <small>Wellness</small>
-              </div>
-              <p class="mb-1 small text-body-secondary">Confidential mental health supports.</p>
-              <small class="text-body-secondary">Virtual and in-person</small>
-            </button>
+      <div class="list-group list-group-flush results"></div>
+    </div>
+  </section>
+`;
 
-            <button type="button" class="list-group-item list-group-item-action">
-              <div class="d-flex w-100 justify-content-between">
-                <h2 class="h6 mb-1">Student Awards and Bursaries</h2>
-                <small>Financial</small>
-              </div>
-              <p class="mb-1 small text-body-secondary">Funding options and application help.</p>
-              <small class="text-body-secondary">Student Services, Main Floor CAT</small>
-            </button>
-
-            <button type="button" class="list-group-item list-group-item-action">
-              <div class="d-flex w-100 justify-content-between">
-                <h2 class="h6 mb-1">IT Service Desk</h2>
-                <small>Tech</small>
-              </div>
-              <p class="mb-1 small text-body-secondary">Account access, Wi-Fi, BYOD support.</p>
-              <small class="text-body-secondary">Library</small>
-            </button>
-          </div>
-        </div>
-      </section>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-`
-class ResourceResults extends HTMLElement {
-  connectedCallback() {
+class ResourceResults extends HTMLElement
+{
+  constructor()
+  {
+    super();
     this.attachShadow({ mode: 'open' });
+
+    this.resources =
+    [
+      {
+        title: 'Peer Tutoring Centre',
+        category: 'Academic',
+        description: 'Drop-in tutoring and study support.',
+        location: 'Building W, Room W101'
+      },
+      {
+        title: 'Counselling Services',
+        category: 'Wellness',
+        description: 'Confidential mental health supports.',
+        location: 'Virtual and in-person'
+      },
+      {
+        title: 'Student Awards and Bursaries',
+        category: 'Financial',
+        description: 'Funding options and application help.',
+        location: 'Student Services, Main Floor CAT'
+      },
+      {
+        title: 'IT Service Desk',
+        category: 'Tech',
+        description: 'Account access, Wi-Fi, BYOD support.',
+        location: 'Library'
+      }
+    ];
+  }
+
+  connectedCallback()
+  {
+    this.shadowRoot.innerHTML = '';
     this.shadowRoot.appendChild(template.content.cloneNode(true));
+
+    const list = this.shadowRoot.querySelector('.results');
+    const count = this.shadowRoot.querySelector('.count');
+
+    count.textContent = this.resources.length;
+
+    for (const resource of this.resources)
+    {
+      const item = document.createElement('resource-item');
+
+      item.setAttribute('title', resource.title);
+      item.setAttribute('category', resource.category);
+      item.setAttribute('description', resource.description);
+      item.setAttribute('location', resource.location);
+
+      list.appendChild(item);
+    }
   }
 }
-
 customElements.define('resource-results', ResourceResults);
