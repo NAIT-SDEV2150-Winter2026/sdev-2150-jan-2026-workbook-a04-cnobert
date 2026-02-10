@@ -27,8 +27,6 @@ class ResourceResults extends HTMLElement {
     openNow: false,
     virtual: false,
   };
-  #error = null;
-  #isLoading = false;
 
   constructor() {
     super();
@@ -72,17 +70,14 @@ class ResourceResults extends HTMLElement {
 
   async #fetchData(source) {
     try {
-      this.#isLoading = true; // for the exercise
       const response = await fetch(source);
       if (!response.ok) {
         throw new Error(`Network problem: ${response.statusText}`);
       }
       const resultData = await response.json();
       this.results = resultData;
-      this.#isLoading = false; // for the exercise
     } catch (error) {
       console.error('Failed to fetch data:', error);
-      this.#error = true; // for the exercise
     }
   }
 
