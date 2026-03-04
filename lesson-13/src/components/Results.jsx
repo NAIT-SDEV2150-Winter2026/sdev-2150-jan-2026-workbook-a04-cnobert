@@ -3,19 +3,15 @@ import { resources } from '../data/resources';
 import Card from './ui/Card';
 
 export default function Results({selectedResource, onSelectResource, searchTerm, selectedCategories, openNowOnly}) {
-  
-  //{
-  //   id: 'tutoring',
-  //   title: 'Peer Tutoring Centre',
-  //   category: 'Academic',
-  //   summary: 'Drop-in tutoring and study support.',
-  //   location: 'Building W, Room W101',
-  //   openNow: true,
-  // }
+
   let filteredResources = resources;
   if(openNowOnly)
     filteredResources = resources.filter((element) => element.openNow === openNowOnly);
-  
+  if(selectedCategories.length > 0)
+    filteredResources = filteredResources.filter((element) => selectedCategories.includes(element.category));
+  if (searchTerm !== '')
+    filteredResources = filteredResources.filter((r) => r.title.toLowerCase().includes(searchTerm.toLowerCase()));
+
   return (
     <Card title="Results">
       <ul className="divide-y divide-gray-200">
